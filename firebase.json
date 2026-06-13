@@ -1,0 +1,24 @@
+{
+  "functions": {
+    "source": "functions",
+    "predeploy": ["npm --prefix functions run build"]
+  },
+  "firestore": {
+    "rules": "firebase/firestore.rules",
+    "indexes": "firebase/firestore.indexes.json",
+    "location": "eur3"
+  },
+  "storage": {
+    "rules": "firebase/storage.rules"
+  },
+  "auth": {
+    "providers": {
+      "emailPassword": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "Hivoraa",
+        "supportEmail": "sipheintech@gmail.com"
+      }
+    },
+    "authorizedDomains": ["localhost", "hivoraa-323d9.firebaseapp.com", "hivoraa-323d9.web.app"]
+  }
+}
