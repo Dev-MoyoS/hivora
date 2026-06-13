@@ -3,7 +3,8 @@ import { getAuth, type Auth } from "firebase-admin/auth";
 
 function buildServiceAccount() {
   const projectId =
-    process.env.FIREBASE_PROJECT_ID ?? process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+    process.env.FIREBASE_PROJECT_ID ??
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
   const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
 
@@ -45,18 +46,20 @@ function initAdminApp(): App | null {
   if (!projectId) return null;
 
   if (account) {
-    const credential =
+    const serviceAccount =
       "clientEmail" in account
-        ? cert({
+        ? {
             projectId: account.projectId,
             clientEmail: account.clientEmail,
             privateKey: account.privateKey,
-            privateKeyId: account.privateKeyId,
-            clientId: account.clientId,
-          })
-        : cert(account);
+          }
+        : {
+            projectId: account.project_id,
+            clientEmail: account.client_email,
+            privateKey: account.private_key.replace(/\\n/g, "\n"),
+          };
 
-    return initializeApp({ credential, projectId });
+    return initializeApp({ credential: cert(serviceAccount), projectId });
   }
 
   if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
